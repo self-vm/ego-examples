@@ -1,0 +1,29 @@
+import web
+import ai
+import env
+import io
+
+env.read()
+
+println("──ENTER THE TASK TO PERFORM──────")
+let task = io.read_line() 
+println("───────────────────────────────── \n")
+
+let actions = ai.do(task)
+actions.map_reduce((action, arg) -> {
+    println("Action: ", action.module, ".", action.member)
+
+    let result = action.exec(arg)
+    let print_result = result
+
+    if type(result) == "string" { // climp total result
+        print_result = result.slice(0, 30) + "..."
+    }
+
+    println(" -> ",  print_result)
+    println("──────────")
+    
+    return  result
+})
+
+println("\nDone.")
