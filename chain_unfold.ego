@@ -1,0 +1,33 @@
+import ai
+import env
+import io
+
+env.read()
+
+let chain = ai.chain(
+  "check if the file ./demo.ego exists, and if exists, 
+  create a file called summarize.txt explaining what it makes",
+  "summarize created or file doesnt exists?"
+)
+
+let result = chain.unfold((link) -> {
+    println("THOUGHT: ", link.def)
+    println(" `- ", link.action.module, ".", link.action.member)
+
+
+    // UNCOMMENT FOR HUMAN IN THE LOOP
+    // print("continue? [Y/n] > ")
+    // let content = io.read_line()
+    // if content != "y" {
+    //     return { continue: false, resolved: "manually interrupted" }
+    // }
+
+    let out = link.action.exec()
+    println("  '-: ", out)
+    println("")
+
+    return { continue: true, resolved: out }
+})
+
+println("Result: ", result)
+
